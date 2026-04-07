@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zero to Live: A Guide to Building with Claude Code</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+            sans: ['"Inter"', 'system-ui', 'sans-serif'],
+            display: ['"Playfair Display"', 'Georgia', 'serif'],
+          },
+          colors: {
+            surface: { 1: '#0F1A2E', 2: '#162032', 3: '#1E2D4A' },
+            accent: { DEFAULT: '#E07A5F', light: '#E8967F' },
+            gold: '#F2CC8F',
+            muted: '#8A9BB5',
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    .section-content{overflow:hidden;transition:max-height .5s ease-in-out}
+    .section-chevron{transition:transform .3s ease}
+    [data-expanded="true"] .section-chevron{transform:rotate(180deg)}
+  </style>
+</head>
+
+<body class="bg-surface-1 text-gray-300 font-sans antialiased">
+
+  <!-- ───────────────────────── PROGRESS BAR ───────────────────────── -->
+  <div id="progress-bar" class="fixed top-0 inset-x-0 z-[60] h-[3px] bg-transparent pointer-events-none">
+    <div id="progress-fill" class="h-full bg-accent w-0"></div>
+  </div>
+
+  <!-- ───────────────────────── NAV ───────────────────────── -->
+  <nav class="fixed top-0 inset-x-0 z-50 border-b border-white/5 bg-surface-1/80 backdrop-blur-lg">
+    <div class="max-w-4xl mx-auto flex items-center justify-between px-6 h-14">
+      <span class="font-mono text-sm text-accent tracking-tight">Zero to Live</span>
+      <div class="hidden sm:flex gap-6 text-xs text-muted font-mono">
+        <a href="#toolbelt" class="hover:text-white transition">toolbelt</a>
+        <a href="#syllabus" class="hover:text-white transition">syllabus</a>
+        <a href="#feedback" class="hover:text-white transition">feedback</a>
+        <a href="#scaling" class="hover:text-white transition">scaling</a>
+        <a href="#launch" class="hover:text-white transition">launch</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ───────────────────────── HERO ───────────────────────── -->
+  <header class="relative pt-32 pb-10 px-6 overflow-hidden">
+
+    <div class="relative max-w-4xl mx-auto">
+      <p class="font-mono text-xs text-accent tracking-widest uppercase mb-4">Technical Guide</p>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white leading-[1.1] tracking-tight font-display">
+        Zero to Live:<br class="hidden sm:block" />
+        A Guide to Building<br class="hidden md:block" /> with <span class="text-accent">Claude Code</span>
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg text-muted leading-relaxed">
+        A hands-on guide to building professional websites through human-AI collaboration. Designed for technical and non-technical creators alike&mdash;proving that the most important skill in the age of AI isn&rsquo;t syntax, it&rsquo;s strategy.
+      </p>
+
+      <p class="mt-4 text-sm text-muted">By <span class="text-gray-300">Ashima Sitaula</span></p>
+
+      <div class="mt-8 flex flex-wrap gap-3 text-xs font-mono">
+        <span class="px-3 py-1 rounded-full border border-white/10 text-muted">plain html</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 text-muted">tailwind cdn</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 text-muted">claude code</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 text-muted">zero-config</span>
+        <span class="px-3 py-1 rounded-full border border-white/10 text-muted">github pages</span>
+      </div>
+
+      <a href="https://ashimasitaula.com" target="_blank" rel="noopener" class="mt-8 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-accent/10 border border-accent/30 text-accent text-sm font-medium hover:bg-accent/20 transition">
+        See the finished site
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </header>
+
+  <!-- ───────────────────────── TABLE OF CONTENTS ───────────────────────── -->
+  <div class="max-w-4xl mx-auto px-6 pt-6 pb-0">
+    <div class="rounded-xl bg-surface-2/80 border border-white/5 overflow-hidden backdrop-blur-sm">
+      <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+        <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+        <span class="font-mono text-xs text-muted">Table of Contents</span>
+      </div>
+      <div class="p-5 flex flex-col gap-2 font-mono text-sm">
+        <a href="#toolbelt" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+          <span class="text-accent text-xs">Step 0</span> Your Digital Toolbelt
+        </a>
+        <a href="#syllabus" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+          <span class="text-accent text-xs">Step 1</span> The Syllabus Approach
+        </a>
+        <a href="#feedback" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+          <span class="text-accent text-xs">Step 2</span> The Feedback Loop
+        </a>
+        <a href="#scaling" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+          <span class="text-accent text-xs">Step 3</span> Scaling &amp; Going Live
+        </a>
+        <a href="#launch" class="flex items-center gap-2 text-gray-400 hover:text-white transition">
+          <span class="text-accent text-xs">Your Turn</span> Launch Checklist
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto px-6 py-10 space-y-8">
+
+    <!-- ════════════════════════════════════════════════════════
+         SECTION 0 — Setting Up Your Digital Toolbelt
+         ════════════════════════════════════════════════════════ -->
+    <section id="toolbelt" class="section-collapsible" data-expanded="true">
+      <button class="section-toggle w-full flex items-center gap-4 text-left cursor-pointer group py-4" aria-expanded="true">
+        <svg class="section-chevron w-5 h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <p class="font-mono text-xs text-accent tracking-widest uppercase mb-1">Step 0</p>
+          <h2 class="text-3xl font-bold text-white tracking-tight font-display group-hover:text-accent transition">Setting Up Your Digital Toolbelt</h2>
+        </div>
+      </button>
+      <div class="section-content" style="max-height:none">
+        <div class="pt-2 pb-8">
+
+      <div class="text-base leading-relaxed text-gray-400 mb-12 space-y-4">
+        <p>
+          Large Language Models aren&rsquo;t just code generators&mdash;they&rsquo;re context-dependent learners. The question isn&rsquo;t &ldquo;Can AI write code?&rdquo; It&rsquo;s &ldquo;Can you teach it to write the <em>right</em> code, consistently, across an entire project?&rdquo; This guide documents the framework used to do exactly that: build an 11-page portfolio from scratch, then retrofit it with a pedagogical system so anyone can replicate the process.
+        </p>
+        <p>
+          Before we write a single line of code, let&rsquo;s meet the three tools that make this entire workflow possible. If you&rsquo;ve never opened a terminal or pushed code to GitHub, this section is for you. If you have, skim the analogies&mdash;they&rsquo;ll reframe these tools in a way that makes the rest of the guide click.
+        </p>
+      </div>
+
+      <!-- ─── Tool 1: GitHub ─── -->
+      <div class="mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center text-accent font-mono text-sm font-bold">1</span>
+          <h3 class="text-xl font-semibold text-white font-display">The Digital Time Machine <span class="text-muted font-normal">(GitHub)</span></h3>
+        </div>
+        <div class="space-y-4 text-base leading-relaxed text-gray-400 ml-11">
+          <p>GitHub is your project&rsquo;s <strong class="text-white">Time Machine</strong>. It&rsquo;s a cloud-based home for your code where you save &ldquo;checkpoints&rdquo; called <em>commits</em>. Every time you reach a milestone&mdash;a page looks right, a feature works, the colors finally match&mdash;you save a checkpoint. If anything breaks later, you don&rsquo;t panic. You just teleport back to a version that worked.</p>
+          <p>Think of it like the &ldquo;undo&rdquo; button in a word processor, except it remembers <em>every version you&rsquo;ve ever saved</em>, with a note about what changed and why.</p>
+        </div>
+      </div>
+
+      <!-- ─── Tool 2: The Terminal ─── -->
+      <div class="mb-12">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 font-mono text-sm font-bold">2</span>
+          <h3 class="text-xl font-semibold text-white font-display">The Engine Room <span class="text-muted font-normal">(The Terminal)</span></h3>
+        </div>
+        <div class="space-y-4 text-base leading-relaxed text-gray-400 ml-11">
+          <p>The Terminal is where you talk directly to your computer using text commands instead of clicking icons. It might look intimidating at first&mdash;a blinking cursor on a dark screen&mdash;but it&rsquo;s simply a conversation. You type a command, the computer responds.</p>
+          <p>Every action you take in this guide&mdash;creating files, saving checkpoints, talking to your AI agent&mdash;happens here.</p>
+        </div>
+        <div class="ml-11 mt-6 rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <span class="font-mono text-xs text-muted">Terminal</span><span></span>
+          </div>
+          <pre class="p-5 font-mono text-sm leading-loose overflow-x-auto"><code><span class="text-muted">~</span> <span class="text-gold">$</span> <span class="text-gray-300">whoami</span>
+<span class="text-green-400">ashima</span>
+
+<span class="text-muted">~</span> <span class="text-gold">$</span> <span class="text-gray-500">_</span></code></pre>
+        </div>
+        <p class="ml-11 mt-3 text-sm text-muted"><span class="font-mono text-gray-300">whoami</span> &mdash; the simplest command. You ask the computer who you are, and it tells you.</p>
+      </div>
+
+      <!-- ─── Tool 3: Claude Code ─── -->
+      <div class="mb-14">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-yellow-500/10 border border-yellow-500/30 flex items-center justify-center text-yellow-400 font-mono text-sm font-bold">3</span>
+          <h3 class="text-xl font-semibold text-white font-display">The Collaborative Partner <span class="text-muted font-normal">(Claude Code)</span></h3>
+        </div>
+        <div class="space-y-4 text-base leading-relaxed text-gray-400 ml-11">
+          <p>Claude Code is an AI agent that lives inside your terminal. It&rsquo;s not a chatbot in a browser window&mdash;it sits right next to your project files, can read them, edit them, and run commands on your behalf. Think of it as a collaborative partner: you describe what you want to build, and it translates your ideas into code.</p>
+          <p>But here&rsquo;s the key insight: like any collaborator, it works best when you give it clear instructions. That&rsquo;s where your skills as a communicator, a teacher, or a project manager become your biggest advantage&mdash;not your ability to memorize syntax.</p>
+        </div>
+      </div>
+
+      <!-- ─── What We're Building With ─── -->
+      <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden mb-8">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          <span class="font-mono text-xs text-muted">The Actual Stack &mdash; ashimasitaula.com</span>
+        </div>
+        <div class="p-5 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center font-mono text-xs">
+          <div class="p-3 rounded-lg bg-surface-3 border border-white/5"><p class="text-white font-medium mb-1">HTML</p><p class="text-muted">11 pages, zero frameworks</p></div>
+          <div class="p-3 rounded-lg bg-surface-3 border border-white/5"><p class="text-white font-medium mb-1">Tailwind CSS</p><p class="text-muted">Loaded from a CDN link</p></div>
+          <div class="p-3 rounded-lg bg-surface-3 border border-white/5"><p class="text-white font-medium mb-1">Vanilla JS</p><p class="text-muted">One file: main.js</p></div>
+          <div class="p-3 rounded-lg bg-surface-3 border border-white/5"><p class="text-white font-medium mb-1">GitHub Pages</p><p class="text-muted">Free hosting, custom domain</p></div>
+        </div>
+      </div>
+
+      <!-- ─── Must-Know Commands ─── -->
+      <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+          <span class="font-mono text-xs text-muted">Terminal &mdash; The 3 Commands Every Beginner Needs</span><span></span>
+        </div>
+        <div class="p-6 space-y-5">
+          <div class="flex items-start gap-5"><div class="flex-shrink-0 w-20 text-right"><span class="font-mono text-base text-gold font-bold">cd</span></div><div class="flex-1 border-l border-white/10 pl-5"><p class="text-white font-medium text-sm">Change Directory</p><p class="text-muted text-sm mt-1">Move between folders. It&rsquo;s how you navigate to your project.</p><pre class="mt-2 font-mono text-xs text-gray-500"><code><span class="text-gold">$</span> cd ashima-portfolio</code></pre></div></div>
+          <div class="flex items-start gap-5"><div class="flex-shrink-0 w-20 text-right"><span class="font-mono text-base text-green-400 font-bold">ls</span></div><div class="flex-1 border-l border-white/10 pl-5"><p class="text-white font-medium text-sm">List</p><p class="text-muted text-sm mt-1">See what&rsquo;s inside your current folder. Your &ldquo;look around&rdquo; command.</p><pre class="mt-2 font-mono text-xs text-gray-500"><code><span class="text-gold">$</span> ls
+index.html  css/  js/  projects/</code></pre></div></div>
+          <div class="flex items-start gap-5"><div class="flex-shrink-0 w-20 text-right"><span class="font-mono text-base text-yellow-400 font-bold">claude</span></div><div class="flex-1 border-l border-white/10 pl-5"><p class="text-white font-medium text-sm">Summon Your Agent</p><p class="text-muted text-sm mt-1">Start a conversation with Claude Code inside your project.</p><pre class="mt-2 font-mono text-xs text-gray-500"><code><span class="text-gold">$</span> claude
+<span class="text-accent">></span> "Help me build a project page for my portfolio"</code></pre></div></div>
+        </div>
+      </div>
+
+      <!-- ─── The Onboarding Checklist ─── -->
+      <div class="mt-14 mb-14">
+        <h3 class="text-2xl font-bold text-white tracking-tight mb-3 font-display">The Onboarding Checklist</h3>
+        <p class="text-base leading-relaxed text-gray-400 mb-8">Before you can use any of these tools together, there are two one-time setup steps. Onboarding matters. A student who feels lost in the first five minutes of a course rarely recovers. So let&rsquo;s make sure your first five minutes are smooth.</p>
+
+        <div class="mb-10">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center text-accent font-mono text-sm font-bold">A</span>
+            <h4 class="text-lg font-semibold text-white">Create Your Home <span class="text-muted font-normal">(GitHub Account)</span></h4>
+          </div>
+          <div class="space-y-4 text-base leading-relaxed text-gray-400 ml-11">
+            <p>Go to <span class="font-mono text-gold">github.com</span> and sign up for a free account. This is your project&rsquo;s permanent home&mdash;the cloud address where your code lives, your checkpoints are stored, and (later) your website will be published from.</p>
+          </div>
+          <div class="ml-11 mt-6 rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+              <div class="flex items-center gap-2"><div class="bg-surface-1 rounded-md px-3 py-1 flex items-center gap-2"><svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke-width="1.5"/></svg><span class="font-mono text-xs text-muted">github.com/signup</span></div></div><span></span>
+            </div>
+            <div class="p-6"><div class="max-w-xs mx-auto space-y-4"><div class="text-center mb-6"><svg class="w-8 h-8 mx-auto text-white mb-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg><p class="text-white font-semibold text-sm">Create your account</p></div><div class="space-y-3"><div class="rounded-md bg-surface-1 border border-white/10 px-3 py-2"><p class="text-xs text-muted mb-1">Username</p><p class="text-sm text-gray-300 font-mono">ashima441</p></div><div class="rounded-md bg-surface-1 border border-white/10 px-3 py-2"><p class="text-xs text-muted mb-1">Email</p><p class="text-sm text-gray-500 font-mono">you@email.com</p></div><div class="rounded-md bg-accent/80 text-white text-center text-sm font-medium py-2 px-4">Sign up</div></div></div></div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-green-500/10 border border-green-500/30 flex items-center justify-center text-green-400 font-mono text-sm font-bold">B</span>
+            <h4 class="text-lg font-semibold text-white">The Handshake <span class="text-muted font-normal">(Connecting Claude to GitHub)</span></h4>
+          </div>
+          <div class="space-y-4 text-base leading-relaxed text-gray-400 ml-11">
+            <p>Claude Code needs permission to &ldquo;talk&rdquo; to GitHub on your behalf&mdash;to push your code, save checkpoints, and publish your site. This is a one-time handshake.</p>
+          </div>
+          <div class="ml-11 mt-6 rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+              <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+              <span class="font-mono text-xs text-muted">Terminal &mdash; The Handshake</span><span></span>
+            </div>
+            <pre class="p-5 font-mono text-sm leading-loose overflow-x-auto"><code><span class="text-muted">~</span> <span class="text-gold">$</span> <span class="text-gray-300">gh auth login</span>
+
+<span class="text-gray-500">? What account do you want to log into?</span>
+  <span class="text-gold">GitHub.com</span>
+
+<span class="text-gray-500">? What is your preferred protocol for Git operations?</span>
+  <span class="text-gold">HTTPS</span>
+
+<span class="text-gray-500">? Authenticate Git with your GitHub credentials?</span>
+  <span class="text-gold">Yes</span>
+
+<span class="text-gray-500">? How would you like to authenticate GitHub CLI?</span>
+  <span class="text-gold">Login with a web browser</span>
+
+<span class="text-gray-500">! First copy your one-time code:</span> <span class="text-yellow-400 font-bold">A1B2-C3D4</span>
+<span class="text-gray-500">Press Enter to open github.com in your browser...</span>
+
+<span class="text-green-400">&#10003; Authentication complete.</span>
+<span class="text-green-400">&#10003; Logged in as <span class="text-white">ashima441</span></span></code></pre>
+          </div>
+          <p class="ml-11 mt-3 text-sm text-muted">You only need to do this once. After the handshake, every <span class="font-mono text-gray-300">git push</span> automatically goes to your GitHub account.</p>
+        </div>
+      </div>
+
+      <!-- ─── Create Your Project ─── -->
+      <div class="mt-14 mb-14">
+        <h3 class="text-2xl font-bold text-white tracking-tight mb-3 font-display">Create Your Project</h3>
+        <p class="text-base leading-relaxed text-gray-400 mb-8">Now that your tools are connected, let&rsquo;s create the folder where your site will live. Open your terminal and run these four commands, one at a time.</p>
+
+        <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <span class="font-mono text-xs text-muted">Terminal &mdash; Create Your Project</span><span></span>
+          </div>
+          <pre class="p-5 font-mono text-sm leading-loose overflow-x-auto"><code><span class="text-muted">~</span> <span class="text-gold">$</span> <span class="text-gray-300">mkdir my-portfolio</span>          <span class="text-gray-600"># Create a new folder</span>
+
+<span class="text-muted">~</span> <span class="text-gold">$</span> <span class="text-gray-300">cd my-portfolio</span>            <span class="text-gray-600"># Enter it</span>
+
+<span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">touch index.html</span>    <span class="text-gray-600"># Create your first webpage</span>
+
+<span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">touch CLAUDE.md</span>      <span class="text-gray-600"># Create your syllabus</span></code></pre>
+        </div>
+
+        <p class="mt-6 text-base leading-relaxed text-gray-400">That&rsquo;s it. You now have a project folder with two empty files: <span class="font-mono text-gold">index.html</span> (your website) and <span class="font-mono text-gold">CLAUDE.md</span> (your syllabus for the AI agent). The next step is filling in that syllabus&mdash;which is exactly what Step 1 covers.</p>
+      </div>
+
+      <!-- Instructional Insight: The Safety Net -->
+      <div class="mt-10 rounded-xl bg-surface-2 border-l-4 border-l-gold border border-gold/20 overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-gold/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          <span class="font-mono text-xs text-muted">Instructional Insight: The Safety Net</span>
+        </div>
+        <div class="p-5 text-sm leading-relaxed space-y-3">
+          <p class="text-gray-400"><span class="text-gold font-medium">Human-to-Human:</span> In education, we know that students learn best in <em>low-stakes environments</em>&mdash;spaces where mistakes are expected, not penalized. These three tools create exactly that. The Time Machine (Git) means you can always roll back. The Partner (Claude Code) means you never have to solve a problem alone. Together, they transform the learning experience from a high-stakes test into an <strong class="text-white">iterative experiment</strong> where there are no &ldquo;wrong&rdquo; moves, only lessons.</p>
+          <p class="text-gray-400 font-mono"><span class="text-gold font-medium">Pro-Tip:</span> If you feel stuck or overwhelmed, remember: <span class="text-gray-300">git log</span> shows you every checkpoint you&rsquo;ve saved, and <span class="text-gray-300">git checkout</span> can take you back to any one of them. You literally cannot break anything permanently.</p>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         SECTION 1 — Step 1: The Syllabus Approach
+         ════════════════════════════════════════════════════════ -->
+    <section id="syllabus" class="section-collapsible" data-expanded="false">
+      <button class="section-toggle w-full flex items-center gap-4 text-left cursor-pointer group py-4" aria-expanded="false">
+        <svg class="section-chevron w-5 h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <p class="font-mono text-xs text-accent tracking-widest uppercase mb-1">Step 1</p>
+          <h2 class="text-3xl font-bold text-white tracking-tight font-display group-hover:text-accent transition">The Syllabus Approach</h2>
+        </div>
+      </button>
+      <div class="section-content" style="max-height:0">
+        <div class="pt-2 pb-8">
+
+      <div class="space-y-5 text-base leading-relaxed text-gray-400 mb-12">
+        <p>Building with an AI agent without a CLAUDE.md is like a student trying to pass a class without a syllabus. They might show up, they might do work&mdash;but without a clear set of expectations, grading criteria, and scope, the output will be inconsistent, off-topic, and impossible to scale.</p>
+        <p>When I originally built the portfolio, the &ldquo;syllabus&rdquo; lived in my head: I knew the colors, the fonts, the structure. It worked for a solo sprint. But when I stepped back and asked, &ldquo;Could someone else replicate this?&rdquo;&mdash;the answer was no. So I retrofitted the project with a formal <strong class="text-white">CLAUDE.md</strong> file: a persistent set of instructions that Claude Code reads automatically before every response. It turned an improvised workflow into a <strong class="text-white">repeatable, teachable system</strong>.</p>
+      </div>
+
+      <!-- VS Code Window: CLAUDE.md -->
+      <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+          <span class="font-mono text-xs text-muted">CLAUDE.md &mdash; ashima-portfolio</span>
+          <button onclick="navigator.clipboard.writeText(this.closest('.rounded-xl').querySelector('code').textContent)" class="text-muted hover:text-white transition p-1 rounded hover:bg-white/5" title="Copy to clipboard"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke-width="1.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke-width="1.5"/></svg></button>
+        </div>
+        <div class="flex">
+          <div class="py-5 pl-4 pr-3 text-right font-mono text-xs text-white/15 select-none leading-relaxed"><div>1</div><div>2</div><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div><div>17</div></div>
+          <pre class="py-5 pr-5 font-mono text-sm leading-relaxed overflow-x-auto flex-1"><code><span class="text-gold font-medium"># Project Core</span>
+<span class="text-gray-500">This is a static portfolio site.</span>
+
+<span class="text-gold font-medium"># Tech Stack</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Plain HTML (no frameworks, no build step)</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Tailwind CSS via CDN</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Vanilla JavaScript (js/main.js)</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Deployed on GitHub Pages</span>
+
+<span class="text-gold font-medium"># Design System</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Colors: navy (#1B2A4A), terracotta (#E07A5F), gold (#F2CC8F)</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Fonts: Inter for body, Playfair Display for headings</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Always read</span> <span class="text-gold">@css/style.css</span> <span class="text-gray-300">before editing any styles</span>
+
+<span class="text-gold font-medium"># Rules</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Every page must include the shared tailwind.config inline block</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Maintain WCAG AA contrast ratios across all pages</span></code></pre>
+        </div>
+      </div>
+
+      <div class="mt-12 space-y-5 text-base leading-relaxed text-gray-400">
+        <p>With this file in place, every prompt I gave Claude was automatically grounded in the project&rsquo;s real constraints. I didn&rsquo;t need to repeat &ldquo;use navy, not black&rdquo; or &ldquo;remember to use Playfair for headings.&rdquo; The agent already knew&mdash;because the syllabus told it.</p>
+      </div>
+
+      <!-- Try It Yourself -->
+      <div class="mt-10 rounded-xl bg-accent/5 border border-accent/20 overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-accent/10">
+          <span class="text-accent text-sm">&#9654;</span>
+          <span class="font-mono text-xs text-accent font-medium">Try It Yourself</span>
+        </div>
+        <div class="p-5 text-sm leading-relaxed space-y-4">
+          <p class="text-gray-400">Open the <span class="font-mono text-gold">CLAUDE.md</span> file you created in Step 0. It&rsquo;s in the root of your project folder&mdash;the same level as <span class="font-mono text-gold">index.html</span>. Paste the following starter template and customize it for your project:</p>
+          <div class="rounded-lg bg-surface-2 border border-white/5 p-4 font-mono text-sm text-gray-300 leading-relaxed overflow-x-auto">
+<pre><code><span class="text-gold"># Project Core</span>
+A personal portfolio website.
+
+<span class="text-gold"># Tech Stack</span>
+- Plain HTML (no frameworks)
+- Tailwind CSS via CDN
+- Deployed on GitHub Pages
+
+<span class="text-gold"># Design System</span>
+- Colors: [your primary], [your accent], [your highlight]
+- Fonts: [your body font], [your heading font]
+- Always read @css/style.css before editing styles
+
+<span class="text-gold"># Rules</span>
+- Maintain consistent navigation across all pages
+- Use semantic HTML for accessibility</code></pre>
+          </div>
+          <p class="text-gray-400">You don&rsquo;t need to get it perfect. Start with what you know&mdash;you&rsquo;ll add rules as you go. Claude Code reads this file <strong class="text-white">automatically</strong> before every response. No config, no setup. Just save the file and it works.</p>
+        </div>
+      </div>
+
+      <!-- Common Mistake -->
+      <div class="mt-10 rounded-xl bg-surface-2 border-l-4 border-l-accent border border-gold/20 overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-gold/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500/60"></span>
+          <span class="font-mono text-xs text-muted">Common Mistake</span>
+        </div>
+        <div class="p-5 text-sm leading-relaxed space-y-4">
+          <div class="flex items-start gap-3"><span class="text-red-400 text-lg leading-none mt-0.5">&#10007;</span><p class="text-gray-400"><strong class="text-red-400">Skipping the CLAUDE.md.</strong> Jumping straight into prompting without defining constraints is like handing a student a final exam on the first day of class. The agent will produce <em>something</em>&mdash;but it won&rsquo;t match your design system.</p></div>
+          <div class="flex items-start gap-3"><span class="text-green-400 text-lg leading-none mt-0.5">&#10003;</span><p class="text-gray-400"><strong class="text-green-400">Start with the syllabus.</strong> Even 5 lines of constraints (stack, colors, fonts) will dramatically improve consistency. In the classroom, we call this <em>scaffolding</em>. In the terminal, we call it a <em>system prompt</em>. A CLAUDE.md file is both.</p></div>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         SECTION 2 — Step 2: The Feedback Loop
+         ════════════════════════════════════════════════════════ -->
+    <section id="feedback" class="section-collapsible" data-expanded="false">
+      <button class="section-toggle w-full flex items-center gap-4 text-left cursor-pointer group py-4" aria-expanded="false">
+        <svg class="section-chevron w-5 h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <p class="font-mono text-xs text-accent tracking-widest uppercase mb-1">Step 2</p>
+          <h2 class="text-3xl font-bold text-white tracking-tight font-display group-hover:text-accent transition">The Feedback Loop</h2>
+        </div>
+      </button>
+      <div class="section-content" style="max-height:0">
+        <div class="pt-2 pb-8">
+
+      <div class="space-y-5 text-base leading-relaxed text-gray-400 mb-12">
+        <p>The best learning happens when we bridge the gap between what we know and what we are building. Even with a technical background, I found myself navigating the learning curve of terminal-based workflows and Git version control in real-time.</p>
+        <p>There was a moment, early in the build, where I Googled &ldquo;how do I git commit.&rdquo; I wasn&rsquo;t just looking for a command. I was <em>steering</em> my own learning&mdash;identifying the exact gap between my intent (save this version of my work) and the tool I needed to express it.</p>
+        <p>The breakthrough occurred when I stopped treating Claude as a simple code generator and started using it as a tutor. When the agent made a mistake, I didn&rsquo;t just fix the code; I updated the project rules in CLAUDE.md to prevent the error from recurring. Every correction became a permanent lesson.</p>
+      </div>
+
+      <!-- Terminal Window: Git workflow -->
+      <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+          <span class="font-mono text-xs text-muted">Terminal &mdash; ashima-portfolio</span>
+          <button onclick="navigator.clipboard.writeText(this.closest('.rounded-xl').querySelector('code').textContent)" class="text-muted hover:text-white transition p-1 rounded hover:bg-white/5" title="Copy to clipboard"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke-width="1.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke-width="1.5"/></svg></button>
+        </div>
+        <pre class="p-5 font-mono text-sm leading-loose overflow-x-auto"><code><span class="text-muted">~/ashima-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git add index.html projects/game-based-learning.html</span>
+
+<span class="text-muted">~/ashima-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git commit -m "Add Game-Based Learning project page"</span>
+<span class="text-green-400">[main a3f7c2d] Add Game-Based Learning project page</span>
+<span class="text-gray-500"> 2 files changed, 187 insertions(+)</span>
+<span class="text-gray-500"> create mode 100644 projects/game-based-learning.html</span>
+
+<span class="text-muted">~/ashima-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git push origin main</span>
+<span class="text-gray-500">Enumerating objects: 5, done.</span>
+<span class="text-gray-500">Counting objects: 100% (5/5), done.</span>
+<span class="text-green-400">To github.com:ashima441/ashima-portfolio.git</span>
+<span class="text-green-400">   b1e4f8a..a3f7c2d  main -> main</span></code></pre>
+      </div>
+
+      <!-- Before / After Comparison -->
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-lg shadow-black/10">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <span class="font-mono text-xs text-red-400">Before: Repeating yourself</span><span></span>
+          </div>
+          <pre class="p-5 font-mono text-sm leading-relaxed overflow-x-auto"><code><span class="text-gold">$</span> <span class="text-gray-300">claude</span> <span class="text-gray-500">"Use navy, not black"</span>
+<span class="text-gold">$</span> <span class="text-gray-300">claude</span> <span class="text-gray-500">"I said navy, not black"</span>
+<span class="text-gold">$</span> <span class="text-gray-300">claude</span> <span class="text-gray-500">"Change the bg to navy"</span>
+<span class="text-muted">// Agent keeps defaulting to #000...</span></code></pre>
+        </div>
+        <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-lg shadow-black/10">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <span class="font-mono text-xs text-green-400">After: Updating the syllabus</span><span></span>
+          </div>
+          <pre class="p-5 font-mono text-sm leading-relaxed overflow-x-auto"><code><span class="text-gold"># CLAUDE.md update</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Primary bg: navy (#1B2A4A)</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Never use pure black (#000)</span>
+<span class="text-yellow-400">-</span> <span class="text-gray-300">Read <span class="text-gold">@css/style.css</span> for tokens</span>
+<span class="text-green-400">// One fix. Permanent guardrail.</span></code></pre>
+        </div>
+      </div>
+
+      <!-- Instructional Insight -->
+      <div class="mt-10 rounded-xl bg-surface-2 border-l-4 border-l-gold border border-gold/20 overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-gold/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          <span class="font-mono text-xs text-muted">Instructional Insight</span>
+        </div>
+        <div class="p-5 text-sm leading-relaxed space-y-3">
+          <p class="text-gray-400"><span class="text-gold font-medium">Human-to-Human:</span> In education, we call this <em>formative assessment</em>&mdash;the practice of using mistakes as data to improve instruction, not just to assign a grade. When the agent wrote the wrong color, I didn&rsquo;t just correct the output. I updated the &ldquo;lesson plan&rdquo; (CLAUDE.md) so the mistake couldn&rsquo;t happen again. That&rsquo;s the difference between fixing code and fixing the <em>system</em> that writes code.</p>
+          <p class="text-gray-400 font-mono"><span class="text-gold font-medium">Pro-Tip:</span> Use file-specific references (<span class="text-gray-300">@css/style.css</span>, <span class="text-gray-300">@projects/cimt-657.html</span>) to ensure the agent has the exact context it needs. This reduces hallucinated code because the agent is reading your actual files, not guessing from its training data.</p>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         SECTION 3 — Step 3: Scaling & Going Live
+         ════════════════════════════════════════════════════════ -->
+    <section id="scaling" class="section-collapsible" data-expanded="false">
+      <button class="section-toggle w-full flex items-center gap-4 text-left cursor-pointer group py-4" aria-expanded="false">
+        <svg class="section-chevron w-5 h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <p class="font-mono text-xs text-accent tracking-widest uppercase mb-1">Step 3</p>
+          <h2 class="text-3xl font-bold text-white tracking-tight font-display group-hover:text-accent transition">Scaling &amp; Going Live</h2>
+        </div>
+      </button>
+      <div class="section-content" style="max-height:0">
+        <div class="pt-2 pb-8">
+
+      <div class="space-y-5 text-base leading-relaxed text-gray-400 mb-12">
+        <p>Going from one page to eleven is like a teacher moving from a one-on-one tutoring session to a full classroom. The knowledge doesn&rsquo;t change, but the <em>system</em> has to. You need a repeatable structure: a syllabus, a rubric, a shared set of expectations.</p>
+        <p>That&rsquo;s exactly what happened with this portfolio. The first page&mdash;<span class="font-mono text-gold">index.html</span>&mdash;was a creative sprint. But by the time I was building the fifth project page, I needed a system. Every page had to load the same Tailwind config, reference the same custom CSS files (<span class="font-mono text-gold">style.css</span> and <span class="font-mono text-gold">animations.css</span>), use the same navy/terracotta/gold palette, and follow the same navbar pattern. The CLAUDE.md file made that possible.</p>
+      </div>
+
+      <!-- File Tree -->
+      <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+          <span class="font-mono text-xs text-muted">Explorer &mdash; ashima-portfolio</span>
+          <span class="font-mono text-xs text-muted">11 files</span>
+        </div>
+        <div class="p-5 font-mono text-sm leading-loose">
+          <div class="text-gray-300"><span class="text-gold">ashima-portfolio/</span></div>
+          <div class="ml-4 space-y-0.5">
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-white">index.html</span> <span class="text-muted text-xs ml-auto">Main portfolio &mdash; 49.7 KB</span></div>
+            <div class="flex items-center gap-2 mt-2"><span class="text-gold">&#9660;</span> <span class="text-gold">projects/</span></div>
+          </div>
+          <div class="ml-8 space-y-0.5">
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">cimt-657.html</span> <span class="text-muted text-xs ml-auto">Graduate Course Design</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">code-for-fun-python.html</span> <span class="text-muted text-xs ml-auto">Python Curriculum</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">game-based-learning.html</span> <span class="text-muted text-xs ml-auto">Game-Based Learning</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">hio-career-days.html</span> <span class="text-muted text-xs ml-auto">HIO Career Days</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">hio-literacy.html</span> <span class="text-muted text-xs ml-auto">Adult Women Literacy</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">game-based-learning.html</span> <span class="text-muted text-xs ml-auto">Self Defense Curriculum</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">online-teaching.html</span> <span class="text-muted text-xs ml-auto">Online Teaching Certificate</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">self-care.html</span> <span class="text-muted text-xs ml-auto">Self Care Program</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">social-media.html</span> <span class="text-muted text-xs ml-auto">Social Media Guidelines</span></div>
+            <div class="flex items-center gap-2"><span class="text-yellow-400/70">&#9670;</span> <span class="text-gray-300">superhero-lesson.html</span> <span class="text-muted text-xs ml-auto">Superhero-Themed Lesson</span></div>
+          </div>
+          <div class="ml-4 mt-2 space-y-0.5"><div class="flex items-center gap-2"><span class="text-gold">&#9660;</span> <span class="text-gold">css/</span></div></div>
+          <div class="ml-8 space-y-0.5">
+            <div class="flex items-center gap-2"><span class="text-blue-400/70">&#9670;</span> <span class="text-gray-300">style.css</span> <span class="text-muted text-xs ml-auto">Design tokens &amp; custom properties</span></div>
+            <div class="flex items-center gap-2"><span class="text-blue-400/70">&#9670;</span> <span class="text-gray-300">animations.css</span> <span class="text-muted text-xs ml-auto">Transitions &amp; keyframes</span></div>
+          </div>
+          <div class="ml-4 mt-2 space-y-0.5"><div class="flex items-center gap-2"><span class="text-gold">&#9660;</span> <span class="text-gold">js/</span></div></div>
+          <div class="ml-8"><div class="flex items-center gap-2"><span class="text-yellow-500/70">&#9670;</span> <span class="text-gray-300">main.js</span> <span class="text-muted text-xs ml-auto">Navigation &amp; interactions</span></div></div>
+        </div>
+      </div>
+
+      <!-- Terminal: Context-aware prompting -->
+      <div class="mt-8 rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+        <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+          <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+          <span class="font-mono text-xs text-muted">Terminal &mdash; Scaling with @file references</span>
+          <button onclick="navigator.clipboard.writeText(this.closest('.rounded-xl').querySelector('code').textContent)" class="text-muted hover:text-white transition p-1 rounded hover:bg-white/5" title="Copy to clipboard"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2" stroke-width="1.5"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" stroke-width="1.5"/></svg></button>
+        </div>
+        <pre class="p-5 font-mono text-sm leading-loose overflow-x-auto"><code><span class="text-muted">~/ashima-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">claude</span>
+<span class="text-gold">&gt;</span> <span class="text-gray-300">"Create a project page for the Online Teaching Certificate.</span>
+  <span class="text-gray-300">Use <span class="text-yellow-400">@projects/cimt-657.html</span> as the structural template.</span>
+  <span class="text-gray-300">Match the color tokens in <span class="text-yellow-400">@css/style.css</span>.</span>
+  <span class="text-gray-300">Include a sticky navbar linking back to <span class="text-yellow-400">@index.html</span>."</span></code></pre>
+      </div>
+
+      <!-- The Living URL -->
+      <div class="mt-16 pt-12 border-t border-white/5">
+        <p class="font-mono text-xs text-green-400 tracking-widest uppercase mb-3">From Code to URL</p>
+        <h3 class="text-2xl font-bold text-white tracking-tight mb-3 font-display">The Living URL</h3>
+        <p class="text-base leading-relaxed text-gray-400 mb-8">You&rsquo;ve built your pages, committed your checkpoints, and pushed everything to GitHub. Now comes the moment that makes it real: turning your repository into a live website. One toggle, and your work is live for the world.</p>
+        <p class="text-base leading-relaxed text-gray-400 mb-8">GitHub Pages is a free hosting service built directly into GitHub. You just tell GitHub which branch contains your HTML files, and it publishes them at <span class="font-mono text-gold">username.github.io/repo-name</span>.</p>
+
+        <!-- GitHub Settings > Pages -->
+        <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <div class="flex items-center gap-2"><div class="bg-surface-1 rounded-md px-3 py-1 flex items-center gap-2"><svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke-width="1.5"/></svg><span class="font-mono text-xs text-muted">github.com/ashima441/ashima-portfolio/settings/pages</span></div></div><span></span>
+          </div>
+          <div class="flex min-h-[360px]">
+            <div class="w-48 flex-shrink-0 border-r border-white/5 bg-surface-3/50 p-4 hidden sm:block">
+              <p class="text-xs text-muted uppercase tracking-wider mb-3 font-medium">Settings</p>
+              <div class="space-y-1 text-sm">
+                <div class="px-3 py-1.5 rounded text-gray-500">General</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Collaborators</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Branches</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Tags</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Actions</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Webhooks</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Environments</div>
+                <div class="px-3 py-1.5 rounded bg-accent/15 text-accent font-medium border border-accent/20">Pages</div>
+                <div class="px-3 py-1.5 rounded text-gray-500">Security</div>
+              </div>
+            </div>
+            <div class="flex-1 p-6">
+              <h4 class="text-white font-semibold text-base mb-1">GitHub Pages</h4>
+              <p class="text-xs text-muted mb-6">Your site is live at <span class="text-gold">https://ashima441.github.io/ashima-portfolio/</span></p>
+              <div class="space-y-5">
+                <div><p class="text-sm text-gray-400 mb-2 font-medium">Source</p><div class="inline-flex items-center gap-2 bg-surface-1 border border-white/10 rounded-md px-3 py-2"><span class="text-sm text-gray-300">Deploy from a branch</span><svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round"/></svg></div></div>
+                <div><p class="text-sm text-gray-400 mb-2 font-medium">Branch</p><div class="flex items-center gap-3"><div class="inline-flex items-center gap-2 bg-surface-1 border border-white/10 rounded-md px-3 py-2"><span class="text-sm text-gray-300">main</span><svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round"/></svg></div><div class="inline-flex items-center gap-2 bg-surface-1 border border-white/10 rounded-md px-3 py-2"><span class="text-sm text-gray-300">/ (root)</span><svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round"/></svg></div><div class="bg-accent/80 text-white text-xs font-medium px-4 py-2 rounded-md">Save</div></div></div>
+                <div class="mt-4 flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-lg px-4 py-3"><span class="text-green-400 text-sm">&#10003;</span><p class="text-sm text-green-400">Your site is published at <span class="font-mono font-medium text-white">https://ashimasitaula.com</span></p></div>
+                <div><p class="text-sm text-gray-400 mb-2 font-medium">Custom domain</p><div class="flex items-center gap-3"><div class="bg-surface-1 border border-white/10 rounded-md px-3 py-2 flex-1"><span class="text-sm text-gray-300 font-mono">ashimasitaula.com</span></div><div class="bg-surface-3 text-muted text-xs font-medium px-4 py-2 rounded-md border border-white/10">Save</div></div><div class="mt-2 flex items-center gap-2"><div class="w-3.5 h-3.5 rounded border border-green-500/50 bg-green-500/20 flex items-center justify-center"><span class="text-green-400 text-[8px]">&#10003;</span></div><span class="text-xs text-muted">Enforce HTTPS</span></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <p class="text-base leading-relaxed text-gray-400 mt-8">That&rsquo;s it. Select <strong class="text-white">main</strong> as your branch, <strong class="text-white">/ (root)</strong> as the folder, click <strong class="text-white">Save</strong>, and within minutes your site is live.</p>
+      </div>
+
+      <!-- Instructional Insight: The Live Link -->
+      <div class="mt-10 rounded-xl bg-surface-2 border-l-4 border-l-gold border border-gold/20 overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-gold/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          <span class="font-mono text-xs text-muted">Instructional Insight: The Live Link</span>
+        </div>
+        <div class="p-5 text-sm leading-relaxed space-y-3">
+          <p class="text-gray-400"><span class="text-gold font-medium">Human-to-Human:</span> In education, we call the final step <em>publication</em>&mdash;the moment a student&rsquo;s work moves from a private draft to a public artifact. Toggling GitHub Pages is exactly that: pressing &ldquo;Publish&rdquo; on your book. Once that switch is on, every <span class="font-mono text-gray-300">git push</span> automatically updates the live site.</p>
+          <p class="text-gray-400"><span class="text-gold font-medium">Human-to-Human:</span> We also call consistent multi-section design <em>curriculum alignment</em>&mdash;making sure every lesson maps back to the same learning objectives. A CLAUDE.md file is what makes that alignment automatic instead of manual.</p>
+          <p class="text-gray-400 font-mono"><span class="text-gold font-medium">Pro-Tip:</span> When scaling to multiple pages, always point the agent at an existing page as a template (<span class="text-gray-300">@projects/cimt-657.html</span>) rather than describing the layout from scratch.</p>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════════════════
+         SECTION 4 — Your Turn: Launch Checklist
+         ════════════════════════════════════════════════════════ -->
+    <section id="launch" class="section-collapsible" data-expanded="true">
+      <button class="section-toggle w-full flex items-center gap-4 text-left cursor-pointer group py-4" aria-expanded="true">
+        <svg class="section-chevron w-5 h-5 text-accent flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div>
+          <p class="font-mono text-xs text-accent tracking-widest uppercase mb-1">Your Turn</p>
+          <h2 class="text-3xl font-bold text-white tracking-tight font-display group-hover:text-accent transition">Launch Your Own Portfolio</h2>
+        </div>
+      </button>
+      <div class="section-content" style="max-height:none">
+        <div class="pt-2 pb-8">
+
+      <div class="space-y-5 text-base leading-relaxed text-gray-400 mb-10">
+        <p>You don&rsquo;t need a computer science degree to follow this workflow. The entire portfolio at <span class="font-mono text-gold">ashimasitaula.com</span> was built with free tools: a text editor, a terminal, and a GitHub account. Here&rsquo;s the four-step checklist.</p>
+      </div>
+
+      <!-- Quick Start Checklist -->
+      <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+        <div class="flex items-center gap-2 px-5 py-3 bg-surface-3 border-b border-white/5">
+          <span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#febc2e]"></span>
+          <span class="w-3 h-3 rounded-full bg-[#28c840]"></span>
+          <span class="font-mono text-xs text-muted ml-2">Quick Start Checklist</span>
+          <span id="checklist-counter" class="font-mono text-xs text-gold ml-auto">0/4 complete</span>
+        </div>
+        <div class="p-6 space-y-6">
+          <div class="checklist-item flex items-start gap-4 cursor-pointer rounded-lg px-3 py-2 -mx-3 hover:bg-white/5 transition" data-step="1">
+            <label class="mt-0.5 flex-shrink-0 w-6 h-6 rounded-md bg-accent/10 border border-accent/30 flex items-center justify-center cursor-pointer">
+              <input type="checkbox" class="checklist-check sr-only" data-key="checklist-1" />
+              <span class="check-icon text-gold text-xs hidden">&#10003;</span>
+              <span class="check-num text-accent font-mono text-xs font-bold">1</span>
+            </label>
+            <div><p class="text-white font-medium item-title">Install Claude Code</p><p class="text-sm text-muted mt-1">Open your terminal and run the installer. Verify it works by typing <span class="font-mono text-gray-300">claude</span> in any project folder.</p></div>
+          </div>
+          <div class="checklist-item flex items-start gap-4 cursor-pointer rounded-lg px-3 py-2 -mx-3 hover:bg-white/5 transition" data-step="2">
+            <label class="mt-0.5 flex-shrink-0 w-6 h-6 rounded-md bg-accent/10 border border-accent/30 flex items-center justify-center cursor-pointer">
+              <input type="checkbox" class="checklist-check sr-only" data-key="checklist-2" />
+              <span class="check-icon text-gold text-xs hidden">&#10003;</span>
+              <span class="check-num text-accent font-mono text-xs font-bold">2</span>
+            </label>
+            <div><p class="text-white font-medium item-title">Create a CLAUDE.md &ldquo;Syllabus&rdquo;</p><p class="text-sm text-muted mt-1">Define your stack, color palette, fonts, and hard rules like accessibility standards. Start with 5&ndash;10 lines.</p></div>
+          </div>
+          <div class="checklist-item flex items-start gap-4 cursor-pointer rounded-lg px-3 py-2 -mx-3 hover:bg-white/5 transition" data-step="3">
+            <label class="mt-0.5 flex-shrink-0 w-6 h-6 rounded-md bg-accent/10 border border-accent/30 flex items-center justify-center cursor-pointer">
+              <input type="checkbox" class="checklist-check sr-only" data-key="checklist-3" />
+              <span class="check-icon text-gold text-xs hidden">&#10003;</span>
+              <span class="check-num text-accent font-mono text-xs font-bold">3</span>
+            </label>
+            <div><p class="text-white font-medium item-title">Establish an iterative feedback loop</p><p class="text-sm text-muted mt-1">Prompt, review, refine. When the agent makes a mistake, update CLAUDE.md with a new rule.</p></div>
+          </div>
+          <div class="checklist-item flex items-start gap-4 cursor-pointer rounded-lg px-3 py-2 -mx-3 hover:bg-white/5 transition" data-step="4">
+            <label class="mt-0.5 flex-shrink-0 w-6 h-6 rounded-md bg-accent/10 border border-accent/30 flex items-center justify-center cursor-pointer">
+              <input type="checkbox" class="checklist-check sr-only" data-key="checklist-4" />
+              <span class="check-icon text-gold text-xs hidden">&#10003;</span>
+              <span class="check-num text-accent font-mono text-xs font-bold">4</span>
+            </label>
+            <div><p class="text-white font-medium item-title">Version control every milestone</p><p class="text-sm text-muted mt-1">Commit after each meaningful change with <span class="font-mono text-gray-300">git add</span> and <span class="font-mono text-gray-300">git commit</span>. Your git history becomes the project&rsquo;s learning journal.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- One Last Pro-Tip -->
+      <div class="mt-4 rounded-xl bg-surface-2 border-l-4 border-l-gold border border-gold/20 overflow-hidden">
+        <div class="flex items-center gap-2 px-5 py-3 border-b border-gold/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+          <span class="font-mono text-xs text-muted">One Last Pro-Tip</span>
+        </div>
+        <div class="p-5 text-sm leading-relaxed">
+          <p class="text-gray-400 font-mono"><span class="text-gold font-medium">Pro-Tip:</span> Run <span class="text-gray-300">git diff</span> after every agent action. Even if you don&rsquo;t fully understand the code yet, scanning the changes builds your intuition for what the agent actually modified&mdash;and it&rsquo;s the fastest way to catch hallucinated output before it ships.</p>
+        </div>
+      </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ───────────────────────── FOOTER ───────────────────────── -->
+  <footer class="border-t border-white/10 bg-surface-2/50 py-12 px-6 mt-8">
+    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-muted font-mono">
+      <span>Written by Ashima Sitaula &middot; built with Claude Code</span>
+      <a href="https://ashimasitaula.com" target="_blank" rel="noopener" class="hover:text-white transition">ashimasitaula.com &nearr;</a>
+    </div>
+  </footer>
+
+  <!-- ───────────────────────── INTERACTIVE JS ───────────────────────── -->
+  <script>
+  (function() {
+    'use strict';
+
+    // === 1. Progress Bar ===
+    var fill = document.getElementById('progress-fill');
+    window.addEventListener('scroll', function() {
+      var h = document.documentElement.scrollHeight - window.innerHeight;
+      fill.style.width = (h > 0 ? (window.scrollY / h) * 100 : 0) + '%';
+    }, { passive: true });
+
+    // === 2. Collapsible Sections ===
+    function toggleSection(section, expand) {
+      var content = section.querySelector('.section-content');
+      var btn = section.querySelector('.section-toggle');
+      if (expand) {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        section.dataset.expanded = 'true';
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+        content.addEventListener('transitionend', function handler() {
+          if (section.dataset.expanded === 'true') content.style.maxHeight = 'none';
+          content.removeEventListener('transitionend', handler);
+        });
+      } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.offsetHeight; // force reflow
+        requestAnimationFrame(function() { content.style.maxHeight = '0px'; });
+        section.dataset.expanded = 'false';
+        if (btn) btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    document.querySelectorAll('.section-toggle').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var section = btn.closest('.section-collapsible');
+        toggleSection(section, section.dataset.expanded !== 'true');
+      });
+    });
+
+    // Nav/TOC links auto-expand target section
+    document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        var id = link.getAttribute('href').slice(1);
+        var target = document.getElementById(id);
+        if (target && target.classList.contains('section-collapsible') && target.dataset.expanded !== 'true') {
+          e.preventDefault();
+          toggleSection(target, true);
+          setTimeout(function() { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+        }
+      });
+    });
+
+    // === 3. Checklist with localStorage ===
+    var STORAGE_KEY = 'guide-checklist';
+
+    function updateCheckVisual(cb) {
+      var item = cb.closest('.checklist-item');
+      var icon = item.querySelector('.check-icon');
+      var num = item.querySelector('.check-num');
+      var title = item.querySelector('.item-title');
+      if (cb.checked) {
+        icon.classList.remove('hidden'); num.classList.add('hidden');
+        title.classList.add('line-through', 'opacity-60');
+      } else {
+        icon.classList.add('hidden'); num.classList.remove('hidden');
+        title.classList.remove('line-through', 'opacity-60');
+      }
+    }
+
+    function updateCounter() {
+      var all = document.querySelectorAll('.checklist-check');
+      var done = [].filter.call(all, function(cb) { return cb.checked; }).length;
+      var counter = document.getElementById('checklist-counter');
+      if (counter) counter.textContent = done + '/' + all.length + ' complete';
+    }
+
+    function loadChecklist() {
+      var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      document.querySelectorAll('.checklist-check').forEach(function(cb) {
+        cb.checked = !!saved[cb.dataset.key];
+        updateCheckVisual(cb);
+      });
+      updateCounter();
+    }
+
+    document.querySelectorAll('.checklist-check').forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        updateCheckVisual(cb);
+        var saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+        saved[cb.dataset.key] = cb.checked;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(saved));
+        updateCounter();
+      });
+    });
+
+    document.querySelectorAll('.checklist-item').forEach(function(item) {
+      item.addEventListener('click', function(e) {
+        if (e.target.tagName === 'INPUT') return;
+        var cb = item.querySelector('.checklist-check');
+        cb.checked = !cb.checked;
+        cb.dispatchEvent(new Event('change'));
+      });
+    });
+
+    loadChecklist();
+  })();
+  </script>
+
+</body>
+</html>
