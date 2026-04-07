@@ -291,7 +291,139 @@ index.html  css/  js/  projects/</code></pre></div></div>
 <span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">touch CLAUDE.md</span>      <span class="text-gray-600"># Create your syllabus</span></code></pre>
         </div>
 
-        <p class="mt-6 text-base leading-relaxed text-gray-400">That&rsquo;s it. You now have a project folder with two empty files: <span class="font-mono text-gold">index.html</span> (your website) and <span class="font-mono text-gold">CLAUDE.md</span> (your syllabus for the AI agent). The next step is filling in that syllabus&mdash;which is exactly what Step 1 covers.</p>
+        <p class="mt-6 text-base leading-relaxed text-gray-400">That&rsquo;s it. You now have a project folder with two empty files: <span class="font-mono text-gold">index.html</span> (your website) and <span class="font-mono text-gold">CLAUDE.md</span> (your syllabus for the AI agent).</p>
+      </div>
+
+      <!-- ─── Put It on GitHub ─── -->
+      <div class="mt-14 mb-14">
+        <h3 class="text-2xl font-bold text-white tracking-tight mb-3 font-display">Put It on GitHub</h3>
+        <p class="text-base leading-relaxed text-gray-400 mb-8">Now let&rsquo;s give your project a home in the cloud. Go to <span class="font-mono text-gold">github.com/new</span> in your browser. You&rsquo;ll see a form like this:</p>
+
+        <!-- CSS Mockup: GitHub New Repo Form -->
+        <div class="rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <div class="flex items-center gap-2"><div class="bg-surface-1 rounded-md px-3 py-1 flex items-center gap-2"><svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" stroke-width="1.5"/></svg><span class="font-mono text-xs text-muted">github.com/new</span></div></div><span></span>
+          </div>
+          <div class="p-6 space-y-6">
+            <!-- Header -->
+            <div class="text-center mb-2">
+              <p class="text-white font-semibold text-base">Create a new repository</p>
+            </div>
+
+            <!-- Owner / Repo Name -->
+            <div>
+              <p class="text-sm text-gray-400 mb-2 font-medium">General</p>
+              <div class="flex items-center gap-3 flex-wrap">
+                <div>
+                  <p class="text-xs text-muted mb-1">Owner</p>
+                  <div class="bg-surface-1 border border-white/10 rounded-md px-3 py-2 flex items-center gap-2">
+                    <svg class="w-4 h-4 text-muted" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                    <span class="text-sm text-gray-300 font-mono">your-username</span>
+                    <svg class="w-3 h-3 text-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-width="2" stroke-linecap="round"/></svg>
+                  </div>
+                </div>
+                <span class="text-gray-500 text-lg mt-5">/</span>
+                <div class="flex-1 min-w-[200px]">
+                  <p class="text-xs text-muted mb-1">Repository name *</p>
+                  <div class="bg-surface-1 border border-accent/40 rounded-md px-3 py-2">
+                    <span class="text-sm text-white font-mono">my-portfolio</span>
+                  </div>
+                  <p class="text-xs text-green-400 mt-1 flex items-center gap-1"><span>&#10003;</span> my-portfolio is available.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+              <p class="text-xs text-muted mb-1">Description <span class="text-gray-600">(optional)</span></p>
+              <div class="bg-surface-1 border border-white/10 rounded-md px-3 py-2">
+                <span class="text-sm text-gray-400">My first website, built with Claude Code.</span>
+              </div>
+            </div>
+
+            <!-- Visibility -->
+            <div>
+              <p class="text-sm text-gray-400 mb-2 font-medium">Configuration</p>
+              <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 bg-accent/10 border border-accent/30 rounded-md px-3 py-2">
+                  <div class="w-3.5 h-3.5 rounded-full border-2 border-accent flex items-center justify-center"><div class="w-1.5 h-1.5 rounded-full bg-accent"></div></div>
+                  <span class="text-sm text-white">Public</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface-1 border border-white/10 rounded-md px-3 py-2">
+                  <div class="w-3.5 h-3.5 rounded-full border-2 border-gray-600"></div>
+                  <span class="text-sm text-gray-500">Private</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Toggles -->
+            <div class="space-y-3 border-t border-white/5 pt-4">
+              <div class="flex items-center justify-between"><span class="text-sm text-gray-400">Add README</span><span class="text-xs text-gray-600 bg-surface-3 px-2 py-0.5 rounded">Off</span></div>
+              <div class="flex items-center justify-between"><span class="text-sm text-gray-400">Add .gitignore</span><span class="text-xs text-gray-600 bg-surface-3 px-2 py-0.5 rounded">No .gitignore</span></div>
+              <div class="flex items-center justify-between"><span class="text-sm text-gray-400">Add license</span><span class="text-xs text-gray-600 bg-surface-3 px-2 py-0.5 rounded">No license</span></div>
+            </div>
+
+            <!-- Create button -->
+            <div class="pt-2">
+              <div class="bg-green-600 text-white text-center text-sm font-medium py-2.5 px-6 rounded-md inline-block">Create repository</div>
+            </div>
+          </div>
+        </div>
+
+        <p class="mt-6 text-base leading-relaxed text-gray-400">Choose <strong class="text-white">Public</strong> so your site can be hosted for free. Leave everything else off&mdash;we already have our files. Click <strong class="text-white">Create repository</strong>.</p>
+
+        <p class="mt-4 text-base leading-relaxed text-gray-400">Now connect your local project to GitHub and push your files up:</p>
+
+        <!-- Terminal: git init and push -->
+        <div class="mt-6 rounded-xl bg-surface-2 border border-white/5 overflow-hidden shadow-2xl shadow-black/20">
+          <div class="flex items-center justify-between px-4 py-2.5 bg-surface-3 border-b border-white/5">
+            <div class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#ff5f57]"></span><span class="w-3 h-3 rounded-full bg-[#febc2e]"></span><span class="w-3 h-3 rounded-full bg-[#28c840]"></span></div>
+            <span class="font-mono text-xs text-muted">Terminal &mdash; Push to GitHub</span><span></span>
+          </div>
+          <pre class="p-5 font-mono text-sm leading-loose overflow-x-auto"><code><span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git init</span>
+<span class="text-gray-500">Initialized empty Git repository</span>
+
+<span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git add index.html CLAUDE.md</span>
+
+<span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git commit -m "Initial commit"</span>
+<span class="text-green-400">[main (root-commit) 1f14eb3] Initial commit</span>
+<span class="text-gray-500"> 2 files changed, 2 insertions(+)</span>
+
+<span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git remote add origin https://github.com/</span><span class="text-accent">your-username</span><span class="text-gray-300">/my-portfolio.git</span>
+
+<span class="text-muted">~/my-portfolio</span> <span class="text-gold">$</span> <span class="text-gray-300">git push -u origin main</span>
+<span class="text-green-400">To https://github.com/your-username/my-portfolio.git</span>
+<span class="text-green-400"> * [new branch]      main -> main</span></code></pre>
+        </div>
+
+        <p class="mt-6 text-base leading-relaxed text-gray-400">Your project is now saved in the cloud. Every future <span class="font-mono text-gray-300">git push</span> will update it. You&rsquo;ve just created your first checkpoint in the Time Machine.</p>
+
+        <!-- Git Vocab Memo -->
+        <div class="mt-8 rounded-xl bg-surface-2 border border-white/5 overflow-hidden">
+          <div class="flex items-center gap-2 px-5 py-3 border-b border-white/5">
+            <span class="w-2.5 h-2.5 rounded-full bg-gold"></span>
+            <span class="font-mono text-xs text-muted">Quick Reference: Git in Plain English</span>
+          </div>
+          <div class="p-5 space-y-4">
+            <div class="flex items-start gap-4">
+              <span class="flex-shrink-0 font-mono text-sm text-gold font-bold w-24 text-right mt-0.5">git add</span>
+              <p class="text-sm text-gray-400"><strong class="text-white">Select your work.</strong> Tells Git which files you want to include in your next checkpoint. Like highlighting the pages of an essay you&rsquo;re ready to submit.</p>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="flex-shrink-0 font-mono text-sm text-gold font-bold w-24 text-right mt-0.5">git commit</span>
+              <p class="text-sm text-gray-400"><strong class="text-white">Save a checkpoint.</strong> Takes a snapshot of your selected files and labels it with a message describing what changed. This saves it <em>locally</em>&mdash;on your computer only.</p>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="flex-shrink-0 font-mono text-sm text-gold font-bold w-24 text-right mt-0.5">git push</span>
+              <p class="text-sm text-gray-400"><strong class="text-white">Upload to the cloud.</strong> Sends your local checkpoints to GitHub so they&rsquo;re backed up, shareable, and (once Pages is enabled) live on the web.</p>
+            </div>
+            <div class="flex items-start gap-4">
+              <span class="flex-shrink-0 font-mono text-sm text-gold font-bold w-24 text-right mt-0.5">git status</span>
+              <p class="text-sm text-gray-400"><strong class="text-white">Check your work.</strong> Shows which files have changed and whether they&rsquo;ve been added or committed yet. Your &ldquo;where am I?&rdquo; command.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Instructional Insight: The Safety Net -->
